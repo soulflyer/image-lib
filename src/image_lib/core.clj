@@ -48,3 +48,7 @@
 ;;   "return an image with the highest rating for the given keyword"
 ;;   [database keyword-collection given-keyword]
 ;;   )
+
+(defn image-paths
+  [db image-collection]
+  (map image-path (mc/find-maps db image-collection {})))
