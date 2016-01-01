@@ -34,6 +34,13 @@
                   (map #(find-sub-keywords database keyword-collection %) (:sub keyword-entry))
                   given-keyword))))))
 
+(defn find-projects
+  "returns a list of all the projects in yyyy/mm/project-name form"
+  [database image-collection]
+  (let [connection (mg/connect)
+        db (mg/get-db connection database)]
+    (sort (set (map project-name (image-paths db image-collection))))))
+
 
 (defn image-path
   "return a string containing the year/month/project/version path of an image"
