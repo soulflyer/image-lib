@@ -2,7 +2,8 @@
   (:require [monger
              [collection :as mc]
              [core :as mg]
-             [operators :refer :all]]))
+             [operators :refer :all]])
+  (:gen-class))
 
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
@@ -33,13 +34,6 @@
         (flatten (conj
                   (map #(find-sub-keywords database keyword-collection %) (:sub keyword-entry))
                   given-keyword))))))
-
-(defn find-projects
-  "returns a list of all the projects in yyyy/mm/project-name form"
-  [database image-collection]
-  (let [connection (mg/connect)
-        db (mg/get-db connection database)]
-    (sort (set (map project-name (image-paths db image-collection))))))
 
 
 (defn image-path
@@ -104,3 +98,10 @@
   (remove
    (fn [im] (find-function (str root-path "/" im)))
    (image-paths database image-collection)))
+
+(defn find-projects
+  "returns a list of all the projects in yyyy/mm/project-name form"
+  [database image-collection]
+  (let [connection (mg/connect)
+        db (mg/get-db connection database)]
+    (sort (set (map project-name (image-paths db image-collection))))))
