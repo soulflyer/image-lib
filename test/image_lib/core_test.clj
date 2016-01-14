@@ -1,7 +1,8 @@
 (ns image-lib.core-test
-  (:require [clojure.test :refer :all]
-            [image-lib.core :refer :all]))
+  (:require [image-lib.core :refer :all])
+  (:use expectations))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(expect (= 1 1))
+
+(expect (let [ar [1 2 3]]
+   (first ar)) 2 )
