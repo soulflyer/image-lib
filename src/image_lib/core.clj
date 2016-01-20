@@ -2,9 +2,7 @@
   (:require [monger
              [collection :as mc]
              [core :as mg]
-             [operators :refer :all]]
-            [seesaw.core :refer :all]
-            [seesaw.tree :refer :all] )
+             [operators :refer :all]])
   (:gen-class))
 
 (defn find-images
@@ -36,6 +34,12 @@
         (flatten (conj
                   (map #(find-sub-keywords database keyword-collection %) (:sub keyword-entry))
                   given-keyword))))))
+
+(defn find-all-images
+  "Given a keyword searches the database for images containing it or any of its sub keywords"
+  [database image-collection keyword-collection given-keyword]
+  (let [keywords (find-sub-keywords database keyword-collection given-keyword)]
+    (flatten (map #(find-images database image-collection "Keywords" %) keywords))))
 
 (defn image-path
   "return a string containing the year/month/project/version path of an image"
@@ -107,9 +111,23 @@
         db (mg/get-db connection database)]
     (sort (set (map project-name (image-paths db image-collection))))))
 
+;; (defn thumbnail-file
+;;   "given a string representing an image, returns the File. containing the thumbnail"
+;;   [image-path]
+;;   (File. (str thumbnail-dir "/" image-path)))
+
 (defn get-best-image
   [database images-collection given-keyword]
-  (thumbnail-file
-   (image-path
-    (last
-     (sort-by :Rating (find-images database images-collection :Keywords given-keyword))))))
+  ;;thumbnail-file
+  (image-path
+   (last
+    (sort-by :Rating (find-images database images-collection :Keywords given-keyword)))))
+
+(defn best-image
+  [database image-collection keyword-collection given-keyword]
+  (image-path
+   (last
+    (sort-by :Rating (find-all-images database
+                                      image-collection
+                                      keyword-collection
+                                      given-keyword )))))
