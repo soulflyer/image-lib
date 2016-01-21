@@ -31,9 +31,9 @@
 
 (defn find-all-images
   "Given a keyword searches the database for images containing it or any of its sub keywords"
-  [database image-collection keyword-collection given-keyword]
-  (let [keywords (find-sub-keywords database keyword-collection given-keyword)]
-    (flatten (map #(find-images database image-collection "Keywords" %) keywords))))
+  [db image-collection keyword-collection given-keyword]
+  (let [keywords (find-sub-keywords db keyword-collection given-keyword)]
+    (flatten (map #(find-images db image-collection "Keywords" %) keywords))))
 
 (defn image-path
   "return a string containing the year/month/project/version path of an image"
@@ -42,12 +42,6 @@
        (:Month image-map) "/"
        (:Project image-map) "/"
        (:Version image-map) ".jpg"))
-
-
-;; (defn find-best-image
-;;   "return an image with the highest rating for the given keyword"
-;;   [database keyword-collection given-keyword]
-;;   )
 
 (defn image-paths
   [db image-collection]
@@ -93,35 +87,28 @@
     (< 0 (count (filter #(re-find (re-pattern %) path) (map basename files))))))
 
 (defn missing-files
-  [database image-collection root-path find-function]
+  [db image-collection root-path find-function]
   (remove
    (fn [im] (find-function (str root-path "/" im)))
-   (image-paths database image-collection)))
+   (image-paths db image-collection)))
 
 (defn find-projects
   "returns a list of all the projects in yyyy/mm/project-name form"
-  [database image-collection]
-  (let [connection (mg/connect)
-        db (mg/get-db connection database)]
-    (sort (set (map project-name (image-paths db image-collection))))))
+  [db image-collection]
+  (sort (set (map project-name (image-paths db image-collection)))))
 
-;; (defn thumbnail-file
-;;   "given a string representing an image, returns the File. containing the thumbnail"
-;;   [image-path]
-;;   (File. (str thumbnail-dir "/" image-path)))
-
-(defn get-best-image
-  [database images-collection given-keyword]
-  ;;thumbnail-file
+(defn best
+  [images]
   (image-path
    (last
-    (sort-by :Rating (find-images database images-collection :Keywords given-keyword)))))
+    (sort-by :Rating images))))
 
 (defn best-image
-  [database image-collection keyword-collection given-keyword]
-  (image-path
-   (last
-    (sort-by :Rating (find-all-images database
-                                      image-collection
-                                      keyword-collection
-                                      given-keyword )))))
+  "Return the first of the highest rated images.
+  If the keyword-collection  parameter is present, searches for the sub keywords too."
+  ([db image-collection keyword-collection given-keyword]
+   (best (find-all-images db image-collection keyword-collection given-keyword)))
+  ([db image-collection given-keyword]
+   (best (find-images db image-collection :Keywords given-keyword)))
+
+  )
