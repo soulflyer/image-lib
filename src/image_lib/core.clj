@@ -8,25 +8,19 @@
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
   [database image-collection field value]
-  (let [connection (mg/connect)
-        db (mg/get-db connection database)]
-    (mc/find-maps db image-collection {field value})))
+  (mc/find-maps database image-collection {field value}))
 
 
 (defn find-images-containing
   "Searches database collection for entries where the given field contains the given value"
   [database image-collection field value]
-  (let [connection (mg/connect)
-        db (mg/get-db connection database)]
-    (mc/find-maps db image-collection {field {$regex value}})))
+  (mc/find-maps database image-collection {field {$regex value}}))
 
 
 (defn find-sub-keywords
   "given a keyword entry returns a list of all the sub keywords"
   [database keyword-collection given-keyword]
-  (let [connection (mg/connect)
-        db (mg/get-db connection database)
-        keyword-entry (first (mc/find-maps db keyword-collection {:_id given-keyword}))]
+  (let [keyword-entry (first (mc/find-maps database keyword-collection {:_id given-keyword}))]
     (if (empty? keyword-entry)
       (println (str "Keyword not found: " given-keyword ))
       (if (= 0 (count (:sub keyword-entry)))

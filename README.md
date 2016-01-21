@@ -26,8 +26,13 @@ Finds a complete list of projects
 http://github.com/soulflyer/check-images
 given a pathname, checks that every image in the db is present under that path.
 
+## Versions
+
+0.1.0-SNAPSHOT Initial version.
+0.1.1-SNAPSHOT Functions now take a database rather than a string so every call doesn't have to re-establish a connection to mongo
+
 ## License
 
-Copyright Iain Wood © 2015
+Copyright Iain Wood © 2015-2016
 
 Distributed under the Eclipse Public License either version 1.0 
