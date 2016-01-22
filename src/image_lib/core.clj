@@ -5,6 +5,18 @@
              [operators :refer :all]])
   (:gen-class))
 
+(defn find-sub-keywords
+  "given a keyword entry returns a list of all the sub keywords"
+  [database keyword-collection given-keyword]
+  (let [keyword-entry (first (mc/find-maps database keyword-collection {:_id given-keyword}))]
+    (if (empty? keyword-entry)
+      (println (str "Keyword not found: " given-keyword))
+      (if (= 0 (count (:sub keyword-entry)))
+        (conj '() given-keyword)
+        (flatten (conj
+                  (map #(find-sub-keywords database keyword-collection %) (:sub keyword-entry))
+                  given-keyword))))))
+
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
   [database image-collection field value]
@@ -15,19 +27,6 @@
   "Searches database collection for entries where the given field contains the given value"
   [database image-collection field value]
   (mc/find-maps database image-collection {field {$regex value}}))
-
-
-(defn find-sub-keywords
-  "given a keyword entry returns a list of all the sub keywords"
-  [database keyword-collection given-keyword]
-  (let [keyword-entry (first (mc/find-maps database keyword-collection {:_id given-keyword}))]
-    (if (empty? keyword-entry)
-      (println (str "Keyword not found: " given-keyword ))
-      (if (= 0 (count (:sub keyword-entry)))
-        (conj '() given-keyword)
-        (flatten (conj
-                  (map #(find-sub-keywords database keyword-collection %) (:sub keyword-entry))
-                  given-keyword))))))
 
 (defn find-all-images
   "Given a keyword searches the database for images containing it or any of its sub keywords"
@@ -47,11 +46,13 @@
   [db image-collection]
   (map image-path (mc/find-maps db image-collection {})))
 
-(defn basename
+(defn version-name
   "Cuts the extension off the end of a string"
   [filename]
-  (let [index-dot (.lastIndexOf filename ".")
-        index-slash (+ 1 (.lastIndexOf filename "/"))]
+  (let [index-dot (if (= -1 (.lastIndexOf filename "."))
+                    (count filename)
+                    (.lastIndexOf filename "."))
+        index-slash (max 0 (+ 1 (.lastIndexOf filename "/")))]
     (if (< 0 index-dot)
       (subs filename index-slash index-dot)
       filename)))
@@ -73,18 +74,20 @@
   (let [file (java.io.File. path)
         dir  (.getParentFile file)
         files (.list dir)]
-    (if (some #{(basename path)} (seq (map basename files))) true false)))
+    (if (some #{(version-name path)} (seq (map version-name files))) true false)))
 
 (defn loosely-related-file-exists?
   "given a pathname to a file, checks if any variant of the file exists
-  (loosely-related-file exists? /home/me/picture/abc.jpg
-  will return true if any file exists in /home/me/pictures  that starts with abc
-  ie: abc.jpg abc.png, abc-version2.jpg etc."
+  (loosely-related-file exists? /home/me/picture/abc_version_2.jpg
+  will return true if any file exists in /home/me/pictures that matches the
+  start of the last section of the pathname
+  ie: abc.jpg abc.NEF, abc-version_2.NEF etc."
   [path]
   (let [file (java.io.File. path)
+        vname (version-name path)
         dir  (.getParentFile file)
         files (.list dir)]
-    (< 0 (count (filter #(re-find (re-pattern %) path) (map basename files))))))
+    (< 0 (count (filter #(re-find (re-pattern %) vname) (map version-name files))))))
 
 (defn missing-files
   [db image-collection root-path find-function]
@@ -92,16 +95,15 @@
    (fn [im] (find-function (str root-path "/" im)))
    (image-paths db image-collection)))
 
-(defn find-projects
+(defn all-projects
   "returns a list of all the projects in yyyy/mm/project-name form"
   [db image-collection]
   (sort (set (map project-name (image-paths db image-collection)))))
 
 (defn best
   [images]
-  (image-path
-   (last
-    (sort-by :Rating images))))
+  (last
+   (sort-by :Rating images)))
 
 (defn best-image
   "Return the first of the highest rated images.
@@ -109,6 +111,4 @@
   ([db image-collection keyword-collection given-keyword]
    (best (find-all-images db image-collection keyword-collection given-keyword)))
   ([db image-collection given-keyword]
-   (best (find-images db image-collection :Keywords given-keyword)))
-
-  )
+   (best (find-images db image-collection :Keywords given-keyword))))
