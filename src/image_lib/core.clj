@@ -112,3 +112,8 @@
    (best (find-all-images db image-collection keyword-collection given-keyword)))
   ([db image-collection given-keyword]
    (best (find-images db image-collection :Keywords given-keyword))))
+
+(defn preference
+  "return the value of the preference from the db"
+  [db preferences-collection pref]
+  (:path (first (mc/find-maps db preferences-collection {:_id pref}))))

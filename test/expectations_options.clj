@@ -14,8 +14,11 @@
       (.close wrtr))
 
     (println "Loading test db")
+    (mc/remove db "preferences")
     (mc/remove db "keywords")
     (mc/remove db "images")
+    (mc/insert-batch db "preferences" [{:_id  "masters-directory"
+                                        :path "/Users/iain/Pictures"}])
     (mc/insert-batch db "keywords" [{:_id "people" :sub ["Kathryn" "Iain" "Rachael"]}
                                     {:_id "Kathryn" :sub []}
                                     {:_id "Iain" :sub []}

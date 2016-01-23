@@ -38,8 +38,7 @@
         (related-file-exists? "/tmp/clojure-test.png"))
 (expect true
         (loosely-related-file-exists? "/tmp/clojure-test_version_1.png"))
-(expect 3
-        (count (all-projects db "images")))
+(expect 3 (count (all-projects db "images")))
 (expect (best [{:_id 1 :Rating "2.0"}
                {:_id 2 :Rating "3.0"}])
         {:_id 2 :Rating "3.0"})
@@ -47,3 +46,5 @@
         "1958/10/12-Test-Project/DIW_002.jpg")
 (expect (image-path (best-image db "images" "keywords" "people"))
         "1981/10/18-Test-Project/DIW_002.jpg")
+(expect (preference db "preferences" "masters-directory")
+        "/Users/iain/Pictures")
