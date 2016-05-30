@@ -18,6 +18,10 @@ and this to the project.clj file:
 http://github.com/soulflyer/find-images
 Finds images based on simple exif/iptc data matches
 
+### image-search
+http://github.com/soulflyer/image-search
+Finds images using a clojure repl. Complex search patterns are possible using and and or filters in any order. Also possible to open the results in a choosen image viewer.
+
 ### find-projects
 http://github.com/soulflyer/find-projects
 Finds a complete list of projects
@@ -35,4 +39,4 @@ given a pathname, checks that every image in the db is present under that path.
 
 Copyright Iain Wood © 2015-2016
 
-Distributed under the Eclipse Public License either version 1.0 
+Distributed under the Eclipse Public License version 1.0 
