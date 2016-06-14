@@ -17,6 +17,14 @@
                   (map #(find-sub-keywords database keyword-collection %) (:sub keyword-entry))
                   given-keyword))))))
 
+(defn add-keyword
+  "Add a new keyword"
+  [db keyword-collection new-keyword parent]
+  (mc/save db keyword-collection
+           (hash-map :_id new-keyword
+                     :sub []))
+  (mc/update db keyword-collection {:_id parent} {$addToSet {:sub new-keyword}}))
+
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
   [database image-collection field value]
@@ -122,6 +130,7 @@
   "return all the preferences"
   [db preferences-collection]
   (mc/find-maps db preferences-collection))
+
 (defn preference!
   "set the value of preference in the db"
   [db preferences-collection pref value]
