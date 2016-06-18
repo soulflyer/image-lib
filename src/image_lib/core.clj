@@ -25,6 +25,23 @@
                      :sub []))
   (mc/update db keyword-collection {:_id parent} {$addToSet {:sub new-keyword}}))
 
+(defn move-keyword
+  "Move a keyword from one parent to another"
+  [db keyword-collection kw old-parent new-parent]
+  (mc/update db keyword-collection {:_id new-parent} {$addToSet {:sub kw}})
+  (mc/update db keyword-collection {:_id old-parent} {$pull {:sub kw}}))
+
+(defn delete-keyword
+  "Remove a keyword"
+  [db keyword-collection kw parent]
+  (mc/remove-by-id db keyword-collection kw)
+  (mc/update db keyword-collection {:_id parent} {$pull {:sub kw}}))
+
+(defn find-parents
+  "given a keyword, returns a list of the parents"
+  [db keyword-collection kw]
+  (mc/find-maps db keyword-collection {:sub kw}))
+
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
   [database image-collection field value]
@@ -107,6 +124,12 @@
   "returns a list of all the projects in yyyy/mm/project-name form"
   [db image-collection]
   (sort (set (map project-name (image-paths db image-collection)))))
+
+(defn all-keywords
+  "returns a set of all keywords found in the given database of images"
+  [db image-collection]
+  (reduce #(set (concat %1 %2))
+          (map :Keywords (mc/find-maps db image-collection {} [:Keywords]))))
 
 (defn best
   [images]
