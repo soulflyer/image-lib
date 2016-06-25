@@ -42,6 +42,12 @@
   [db keyword-collection kw]
   (mc/find-maps db keyword-collection {:sub kw}))
 
+(defn rename-keyword
+  "Changes the keyword including any references in parents. Doesn't change the original images"
+  [db keyword-collection old-keyword new-keyword]
+  (let [parents (find-parents db keyword-collection old-keyword)
+        ]))
+
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
   [database image-collection field value]
@@ -125,11 +131,16 @@
   [db image-collection]
   (sort (set (map project-name (image-paths db image-collection)))))
 
-(defn all-keywords
+(defn used-keywords
   "returns a set of all keywords found in the given database of images"
   [db image-collection]
   (reduce #(set (concat %1 %2))
           (map :Keywords (mc/find-maps db image-collection {} [:Keywords]))))
+
+(defn all-ids
+  "returns all the keyword ids"
+  [db keyword-collection]
+  (map :_id (mc/find-maps db keyword-collection)))
 
 (defn best
   [images]
