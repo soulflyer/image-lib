@@ -38,17 +38,17 @@
 
 (defn delete-keyword
   "Remove a keyword"
-    ([db keyword-collection kw parent]
+  ([db keyword-collection kw parent]
    (mc/remove-by-id db keyword-collection kw)
    (mc/update db keyword-collection {:_id parent} {$pull {:sub kw}}))
-    ([db keyword-collection kw]
-     (delete-keyword db keyword-collection kw
-                     (first (find-parents db keyword-collection kw)))))
+  ([db keyword-collection kw]
+   (delete-keyword db keyword-collection kw
+                   (:_id (first (find-parents db keyword-collection kw))))))
 
 (defn safe-delete-keyword
   "Delete a keyword, but only if it has no sub keywords"
   [db keyword-collection kw parent]
-  (let [keyword (get-keyword kw)]
+  (let [keyword (mc/find-map-by-id db keyword-collection kw)]
     (if (= 0 (count (:sub keyword)))
       (delete-keyword db keyword-collection kw parent))))
 
@@ -56,7 +56,13 @@
   "Changes the keyword including any references in parents. Doesn't change the original images"
   [db keyword-collection old-keyword new-keyword]
   (let [parents (find-parents db keyword-collection old-keyword)
-        ]))
+        parent  (:_id (first parents))
+        children (:sub (mc/find-map-by-id db keyword-collection old-keyword))]
+    (add-keyword db keyword-collection new-keyword parent)
+    (doall (map #(move-keyword db keyword-collection % old-keyword new-keyword) children))
+    (delete-keyword db keyword-collection old-keyword)))
+
+
 
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
