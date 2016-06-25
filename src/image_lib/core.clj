@@ -31,16 +31,26 @@
   (mc/update db keyword-collection {:_id new-parent} {$addToSet {:sub kw}})
   (mc/update db keyword-collection {:_id old-parent} {$pull {:sub kw}}))
 
-(defn delete-keyword
-  "Remove a keyword"
-  [db keyword-collection kw parent]
-  (mc/remove-by-id db keyword-collection kw)
-  (mc/update db keyword-collection {:_id parent} {$pull {:sub kw}}))
-
 (defn find-parents
   "given a keyword, returns a list of the parents"
   [db keyword-collection kw]
   (mc/find-maps db keyword-collection {:sub kw}))
+
+(defn delete-keyword
+  "Remove a keyword"
+    ([db keyword-collection kw parent]
+   (mc/remove-by-id db keyword-collection kw)
+   (mc/update db keyword-collection {:_id parent} {$pull {:sub kw}}))
+    ([db keyword-collection kw]
+     (delete-keyword db keyword-collection kw
+                     (first (find-parents db keyword-collection kw)))))
+
+(defn safe-delete-keyword
+  "Delete a keyword, but only if it has no sub keywords"
+  [db keyword-collection kw parent]
+  (let [keyword (get-keyword kw)]
+    (if (= 0 (count (:sub keyword)))
+      (delete-keyword db keyword-collection kw parent))))
 
 (defn rename-keyword
   "Changes the keyword including any references in parents. Doesn't change the original images"
