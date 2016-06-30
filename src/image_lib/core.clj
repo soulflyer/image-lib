@@ -52,17 +52,31 @@
     (if (= 0 (count (:sub keyword)))
       (delete-keyword db keyword-collection kw parent))))
 
+(defn remove-keyword-from-photos
+  "removes a given keyword from the keywords field of all images"
+  [db image-collection keyword]
+  (let [photos (find-images db image-collection :Keywords keyword)]
+    (doall (map #(mc/update db image-collection % {$pull {:Keywords keyword}}) photos))))
+
+(defn replace-keyword-in-photos
+  "replace keyword in the :Keywords field of all images"
+  [db image-collection old-keyword new-keyword]
+  (let [photos (find-images db image-collection :Keywords old-keyword)]
+    (doall (map #(mc/update db image-collection % {$addToSet {:Keywords new-keyword}}) photos))
+    (remove-keyword-from-photos db image-collection old-keyword)))
+
 (defn rename-keyword
-  "Changes the keyword including any references in parents. Doesn't change the original images"
-  [db keyword-collection old-keyword new-keyword]
-  (let [parents (find-parents db keyword-collection old-keyword)
-        parent  (:_id (first parents))
-        children (:sub (mc/find-map-by-id db keyword-collection old-keyword))]
-    (add-keyword db keyword-collection new-keyword parent)
-    (doall (map #(move-keyword db keyword-collection % old-keyword new-keyword) children))
-    (delete-keyword db keyword-collection old-keyword)))
-
-
+  "Changes the keyword including any references in parents. If given the image-collection it will also change the keyword in the :Keyword field of every matching entry in the image-collection. Doesn't change the original images"
+  ([db keyword-collection old-keyword new-keyword]
+   (let [parents (find-parents db keyword-collection old-keyword)
+         parent  (:_id (first parents))
+         children (:sub (mc/find-map-by-id db keyword-collection old-keyword))]
+     (add-keyword db keyword-collection new-keyword parent)
+     (doall (map #(move-keyword db keyword-collection % old-keyword new-keyword) children))
+     (delete-keyword db keyword-collection old-keyword)))
+  ([db keyword-collection image-collection old-keyword new-keyword]
+   (rename-keyword db keyword-collection old-keyword new-keyword)
+   (replace-keyword-in-photos db image-collection old-keyword new-keyword)))
 
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
