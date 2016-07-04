@@ -20,9 +20,10 @@
 (defn add-keyword
   "Add a new keyword"
   [db keyword-collection new-keyword parent]
-  (mc/save db keyword-collection
-           (hash-map :_id new-keyword
-                     :sub []))
+  (if-not (mc/find-by-id db keyword-collection new-keyword)
+    (mc/save db keyword-collection
+                  (hash-map :_id new-keyword
+                            :sub [])))
   (mc/update db keyword-collection {:_id parent} {$addToSet {:sub new-keyword}}))
 
 (defn move-keyword
@@ -36,21 +37,30 @@
   [db keyword-collection kw]
   (mc/find-maps db keyword-collection {:sub kw}))
 
+(defn find-images
+  "Searches database collection for entries where the given field matches the given value"
+  [database image-collection field value]
+  (mc/find-maps database image-collection {field value}))
+
 (defn delete-keyword
   "Remove a keyword"
   ([db keyword-collection kw parent]
    (mc/remove-by-id db keyword-collection kw)
    (mc/update db keyword-collection {:_id parent} {$pull {:sub kw}}))
   ([db keyword-collection kw]
-   (delete-keyword db keyword-collection kw
-                   (:_id (first (find-parents db keyword-collection kw))))))
+   (let [parents (map :_id (find-parents db keyword-collection kw))]
+     (doall (map #(delete-keyword db keyword-collection kw %) parents)))))
 
 (defn safe-delete-keyword
   "Delete a keyword, but only if it has no sub keywords"
-  [db keyword-collection kw parent]
-  (let [keyword (mc/find-map-by-id db keyword-collection kw)]
-    (if (= 0 (count (:sub keyword)))
-      (delete-keyword db keyword-collection kw parent))))
+  ([db keyword-collection kw]
+   (let [keyword (mc/find-map-by-id db keyword-collection kw)]
+     (if (= 0 (count (:sub keyword)))
+       (delete-keyword db keyword-collection kw))))
+  ([db keyword-collection kw parent]
+   (let [keyword (mc/find-map-by-id db keyword-collection kw)]
+     (if (= 0 (count (:sub keyword)))
+       (delete-keyword db keyword-collection kw parent)))))
 
 (defn remove-keyword-from-photos
   "removes a given keyword from the keywords field of all images"
@@ -77,12 +87,6 @@
   ([db keyword-collection image-collection old-keyword new-keyword]
    (rename-keyword db keyword-collection old-keyword new-keyword)
    (replace-keyword-in-photos db image-collection old-keyword new-keyword)))
-
-(defn find-images
-  "Searches database collection for entries where the given field matches the given value"
-  [database image-collection field value]
-  (mc/find-maps database image-collection {field value}))
-
 
 (defn find-images-containing
   "Searches database collection for entries where the given field contains the given value"
