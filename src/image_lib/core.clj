@@ -42,6 +42,11 @@
   [database image-collection field value]
   (mc/find-maps database image-collection {field value}))
 
+(defn disconnect-keyword
+  "Removes keyword from parent keyword but doesn't delete it"
+  [db keyword-collection keyword parent]
+  (mc/update db keyword-collection {:_id parent} {$pull {:sub keyword}}))
+
 (defn delete-keyword
   "Remove a keyword"
   ([db keyword-collection kw parent]
@@ -87,6 +92,14 @@
   ([db keyword-collection image-collection old-keyword new-keyword]
    (rename-keyword db keyword-collection old-keyword new-keyword)
    (replace-keyword-in-photos db image-collection old-keyword new-keyword)))
+
+(defn merge-keyword
+  [db keyword-collection keep-keyword dispose-keyword]
+  (let [dispose-keyword-parents (find-parents dispose-keyword)
+        dispose-keyword-parent  (first dispose-keyword-parents)]
+    (rename-keyword db keyword-collection dispose-keyword keep-keyword)
+    (if (= 1 (count dispose-keyword-parents))
+      (disconnect-keyword dispose-keyword dispose-keyword-parent))))
 
 (defn find-images-containing
   "Searches database collection for entries where the given field contains the given value"
@@ -155,6 +168,7 @@
     (< 0 (count (filter #(re-find (re-pattern %) vname) (map version-name files))))))
 
 (defn missing-files
+  "Searches the directory given by root-path and returns a list of any images not found there but present in the image db. find-function is a function that when given a file path returns true or false. Try image-lib.core/file-exists? "
   [db image-collection root-path find-function]
   (remove
    (fn [im] (find-function (str root-path "/" im)))
@@ -175,6 +189,29 @@
   "returns all the keyword ids"
   [db keyword-collection]
   (map :_id (mc/find-maps db keyword-collection)))
+
+(defn unused-keywords
+  "returns a set of all keywords found in the keyword-collection but not present in any images"
+  [db image-collection keyword-collection]
+  (clojure.set/difference
+   (set (all-ids db keyword-collection))
+   (used-keywords db image-collection)))
+
+(defn missing-keywords
+  "Returns a set of all keywords found in images but not in the keyword collection"
+  [db image-collection keyword-collection]
+  (clojure.set/difference
+   (used-keywords db image-collection)
+   (set (all-ids db keyword-collection))))
+
+(defn add-missing-keywords
+  "Add any keywords present in the images but not in the keyword collection"
+  ([db image-collection keyword-collection root-keyword]
+   (let [_ (add-keyword db keyword-collection root-keyword "Root")
+         missing (missing-keywords db image-collection keyword-collection)]
+     (map #(add-keyword db keyword-collection % root-keyword) missing)))
+  ([db image-collection keyword-collection]
+   (add-missing-keywords db image-collection keyword-collection "orphaned keywords")))
 
 (defn best
   [images]
