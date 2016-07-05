@@ -2,7 +2,8 @@
   (:require [monger
              [collection :as mc]
              [core :as mg]
-             [operators :refer :all]])
+             [operators :refer :all]]
+            [clojure.set :refer [difference]])
   (:gen-class))
 
 (defn find-sub-keywords
@@ -192,14 +193,14 @@
 (defn unused-keywords
   "returns a set of all keywords found in the keyword-collection but not present in any images"
   [db image-collection keyword-collection]
-  (clojure.set/difference
+  (difference
    (set (all-ids db keyword-collection))
    (used-keywords db image-collection)))
 
 (defn missing-keywords
   "Returns a set of all keywords found in images but not in the keyword collection"
   [db image-collection keyword-collection]
-  (clojure.set/difference
+  (difference
    (used-keywords db image-collection)
    (set (all-ids db keyword-collection))))
 
