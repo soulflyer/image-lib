@@ -94,12 +94,11 @@
    (replace-keyword-in-photos db image-collection old-keyword new-keyword)))
 
 (defn merge-keyword
-  [db keyword-collection keep-keyword dispose-keyword]
-  (let [dispose-keyword-parents (find-parents dispose-keyword)
+  [db keyword-collection image-collection dispose-keyword keep-keyword]
+  (let [dispose-keyword-parents (find-parents db keyword-collection dispose-keyword)
         dispose-keyword-parent  (first dispose-keyword-parents)]
-    (rename-keyword db keyword-collection dispose-keyword keep-keyword)
-    (if (= 1 (count dispose-keyword-parents))
-      (disconnect-keyword dispose-keyword dispose-keyword-parent))))
+    (replace-keyword-in-photos db image-collection dispose-keyword keep-keyword)
+    (delete-keyword db keyword-collection dispose-keyword)))
 
 (defn find-images-containing
   "Searches database collection for entries where the given field contains the given value"
