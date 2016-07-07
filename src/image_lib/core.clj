@@ -3,7 +3,17 @@
              [collection :as mc]
              [core :as mg]
              [operators :refer :all]]
-            [clojure.set :refer [difference]])
+            [clojure.set :refer [difference]]
+            [clojure.string :refer [replace]]
+            [clojure.set :refer [difference]]
+            [monger
+             [collection :as mc]
+             [core :as mg]
+             [operators :refer :all]]
+            [seesaw
+             [core :refer :all]
+             [tree :refer :all]
+             [keymap :refer :all]])
   (:gen-class))
 
 (def database                   "photos")
@@ -12,6 +22,11 @@
 (def image-collection           "images")
 (def connection (mg/connect))
 (def db (mg/get-db connection database))
+
+(defn get-keyword
+  [keyword-name]
+  (first (mc/find-maps db keyword-collection {:_id keyword-name})))
+
 
 (defn find-sub-keywords
   "given a keyword entry returns a list of all the sub keywords"
@@ -53,6 +68,11 @@
    (mc/find-maps db keyword-collection {:sub kw}))
   ([kw]
    (find-parents db keyword-collection kw)))
+
+(defn first-parent
+  "get the parent keyword map"
+  [keyword]
+  (first (find-parents db keyword-collection keyword)))
 
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
@@ -242,6 +262,10 @@
    (map :_id (mc/find-maps db keyword-collection)))
   ([]
    (all-ids db keyword-collection)))
+
+(defn all-keywords
+  []
+  (all-ids db keyword-collection))
 
 (defn unused-keywords
   "returns a set of all keywords found in the keyword-collection but not present in any images"
