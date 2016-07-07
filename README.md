@@ -10,7 +10,7 @@ To add to a clojure project, add this to the ns defn
 
 and this to the project.clj file:
 
-    [image-lib "0.1.0-SNAPSHOT"]
+    [image-lib "0.1.1-SNAPSHOT"]
     
 ## Soulflyer projects using image-lib
 
@@ -29,6 +29,10 @@ Finds a complete list of projects
 ### check-images
 http://github.com/soulflyer/check-images
 given a pathname, checks that every image in the db is present under that path.
+
+### keywords
+http://github.com/soulflyer/find-pics
+This is a standalone keyword browser. It allows for creating and rearranging keywords, browsing the keyword heirarchy, and viewing pictures with selected keywords. It can also output a list of images for further processing.
 
 ## Versions
 
