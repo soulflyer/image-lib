@@ -10,10 +10,11 @@
              [collection :as mc]
              [core :as mg]
              [operators :refer :all]]
-            [seesaw
-             [core :refer :all]
-             [tree :refer :all]
-             [keymap :refer :all]])
+            ;; [seesaw
+            ;;  [core :refer :all]
+            ;;  [tree :refer :all]
+            ;;  [keymap :refer :all]]
+            )
   (:gen-class))
 
 (def database                   "photos")
@@ -24,9 +25,16 @@
 (def db (mg/get-db connection database))
 
 (defn get-keyword
-  [keyword-name]
-  (first (mc/find-maps db keyword-collection {:_id keyword-name})))
+  ([database kw-collection keyword-name]
+   (first (mc/find-maps database kw-collection {:_id keyword-name})))
+  ([keyword-name]
+   (get-keyword db keyword-collection keyword-name)))
 
+(defn find-keyword
+  ([db kc kw]
+   (get-keyword db kc kw))
+  ([kw]
+   (get-keyword kw)))
 
 (defn find-sub-keywords
   "given a keyword entry returns a list of all the sub keywords"
@@ -335,3 +343,25 @@
    (mc/update db preferences-collection {:_id pref} {$set {:path value}} {:upsert true}))
   ([pref value]
    (preference! db preference-collection pref value)))
+
+(defn all-sub-keywords
+  ([database kw-collection ]
+   (reduce
+    (fn [a b] (concat a (:sub (find-keyword b))))
+    #{}
+    (all-keywords)))
+  ([]
+   (all-sub-keywords db keyword-collection )))
+
+(defn orphaned-keywords
+  ([database kw-collection]
+   (difference (set (all-keywords))
+               (set (all-sub-keywords))))
+  ([]
+   (orphaned-keywords db keyword-collection)))
+
+(defn add-orphaned-keywords
+  ([db kc]
+   (map #(add-keyword db kc % "orphaned keywords") (difference (orphaned-keywords) #{"Root"})))
+  ([]
+   (add-orphaned-keywords db keyword-collection)))
