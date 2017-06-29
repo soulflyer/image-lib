@@ -5,24 +5,20 @@
              [operators :refer :all]]
             [clojure.set :refer [difference]]
             [clojure.string :refer [replace]]
-            [clojure.set :refer [difference]]
-            [monger
-             [collection :as mc]
-             [core :as mg]
-             [operators :refer :all]]
-            ;; [seesaw
-            ;;  [core :refer :all]
-            ;;  [tree :refer :all]
-            ;;  [keymap :refer :all]]
-            )
+            [image-lib.helper :refer [version-name
+                                      project-name]])
   (:gen-class))
 
 (def database                   "photos")
 (def keyword-collection       "keywords")
 (def preference-collection "preferences")
 (def image-collection           "images")
+;; The following are constants so thet we don't have to make a new connection for every
+;; call to the db
 (def connection (mg/connect))
 (def db (mg/get-db connection database))
+;; all-images should probably be rewritten as a function?
+(def all-images      (mc/find-maps db image-collection))
 
 (defn get-keyword
   ([database kw-collection keyword-name]
@@ -196,25 +192,6 @@
   ([]
    (image-paths db image-collection)))
 
-(defn version-name
-  "Cuts the extension off the end of a string"
-  [filename]
-  (let [index-dot (if (= -1 (.lastIndexOf filename "."))
-                    (count filename)
-                    (.lastIndexOf filename "."))
-        index-slash (max 0 (+ 1 (.lastIndexOf filename "/")))]
-    (if (< 0 index-dot)
-      (subs filename index-slash index-dot)
-      filename)))
-
-(defn project-name
-  "cuts the last part of the pathname off to leave yyyy/mm/project-name"
-  [filename]
-  (let [index-slash (.lastIndexOf filename "/")]
-    (if (< 0 index-slash)
-      (subs filename 0 index-slash)
-      filename)))
-
 (defn file-exists?
   [path]
   (let [file (java.io.File. path)]
@@ -365,3 +342,11 @@
    (map #(add-keyword db kc % "orphaned keywords") (difference (orphaned-keywords) #{"Root"})))
   ([]
    (add-orphaned-keywords db keyword-collection)))
+
+(defmacro images
+  "Shorthand that allows us to use 'images' instead of '-> all-images'
+  Note that all-images is defined as a variable, so it won't necessarily
+  be the most up to date representation of the db contents."
+  [& forms]
+  `(-> all-images
+       ~@forms))
