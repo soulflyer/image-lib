@@ -46,3 +46,11 @@
     (if (< 0 index-slash)
       (subs filename 0 index-slash)
       filename)))
+
+(defn project-year
+  "returns the year from a project name in the form yyyy/mm/project"
+  [proj]
+  (let [index-slash (.indexOf proj "/")]
+    (if (< 0 index-slash)
+      (subs proj 0 index-slash)
+      proj)))

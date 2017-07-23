@@ -9,14 +9,16 @@
                                       project-name]])
   (:gen-class))
 
-;; (def database                   "photos")
-;; (def keyword-collection       "keywords")
-;; (def preference-collection "preferences")
-;; (def image-collection           "images")
+(def database                   "photos")
+(def keyword-collection       "keywords")
+(def preference-collection "preferences")
+(def image-collection           "images")
 ;; The following are constants so thet we don't have to make a new connection for every
-;; call to the db
-;;(def connection (mg/connect))
-;;(def db (mg/get-db connection database))
+;; call to the db. Uncomment them only for dev work. Normally the code that calls image-lib
+;; will set these.
+(comment
+  (def connection (mg/connect))
+  (def db (mg/get-db connection database)))
 ;; all-images should probably be rewritten as a function?
 ;;(def all-images      (mc/find-maps db image-collection))
 
@@ -70,6 +72,11 @@
   "Searches database collection for entries where the given field matches the given value"
   [database image-collection field value]
   (mc/find-maps database image-collection {field value}))
+
+(defn project-images
+  "Returns all the images from a given project"
+  [database image-collection year month project]
+  (mc/find-maps database image-collection {:Year year :Month month :Project project}))
 
 (defn disconnect-keyword
   "Removes keyword from parent keyword but doesn't delete it"
