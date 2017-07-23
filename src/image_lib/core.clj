@@ -1,9 +1,7 @@
 (ns image-lib.core
   (:gen-class)
   (:require [clojure.set :refer [difference]]
-            [image-lib.helper :refer [project-name
-                                      version-name
-                                      image-path]]
+            [image-lib.helper :refer [image-path version-name]]
             [monger.collection :as mc]
             [monger.core :as mg]
             [monger.operators :refer :all]))
@@ -71,16 +69,6 @@
   "Searches database collection for entries where the given field matches the given value"
   [database image-collection field value]
   (mc/find-maps database image-collection {field value}))
-
-(defn project-images
-  "Returns all the images from a given project"
-  [database image-collection year month project]
-  (mc/find-maps database image-collection {:Year year :Month month :Project project}))
-
-(defn project-paths
-  "returns paths of all images in a given project"
-  [database image-collection year month project]
-  (sort (map image-path (project-images database image-collection year month project))))
 
 (defn disconnect-keyword
   "Removes keyword from parent keyword but doesn't delete it"
@@ -189,11 +177,6 @@
     (fn [im] (find-function (str root-path "/" im)))
     (image-paths db image-collection)))
 
-(defn all-projects
-  "returns a list of all the projects in yyyy/mm/project-name form"
-  [db image-collection]
-  (sort (set (map project-name (image-paths db image-collection)))))
-
 (defn used-keywords
   "returns a set of all keywords found in the given database of images"
   [db image-collection]
@@ -246,21 +229,6 @@
   "Return the first of the highest rated images, searches sub keywords too"
   [db image-collection keyword-collection keyword]
   (best (find-all-images db image-collection keyword-collection keyword)))
-
-(defn preference
-  "return the value of the preference from the db"
-  [db preferences-collection pref]
-  (:path (first (mc/find-maps db preferences-collection {:_id pref}))))
-
-(defn preferences
-  "return all the preferences"
-  [db preferences-collection]
-  (mc/find-maps db preferences-collection))
-
-(defn preference!
-  "set the value of preference in the db"
-  [db preferences-collection pref value]
-  (mc/update db preferences-collection {:_id pref} {$set {:path value}} {:upsert true}))
 
 (defn all-sub-keywords
   [database kw-collection ]
