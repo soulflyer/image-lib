@@ -78,6 +78,11 @@
   [database image-collection year month project]
   (mc/find-maps database image-collection {:Year year :Month month :Project project}))
 
+(defn project-paths
+  "returns paths of all images in a given project"
+  [database image-collection year month project]
+  (sort (map image-path (project-images database image-collection year month project))))
+
 (defn disconnect-keyword
   "Removes keyword from parent keyword but doesn't delete it"
   [db keyword-collection keyword parent]
