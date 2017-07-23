@@ -54,3 +54,11 @@
     (if (< 0 index-slash)
       (subs proj 0 index-slash)
       proj)))
+
+(defn image-path
+  "return a string containing the year/month/project/version path of an image"
+  [image-map]
+  (str (:Year image-map) "/"
+       (:Month image-map) "/"
+       (:Project image-map) "/"
+       (:Version image-map) ".jpg"))

@@ -1,13 +1,12 @@
 (ns image-lib.core
-  (:require [monger
-             [collection :as mc]
-             [core :as mg]
-             [operators :refer :all]]
-            [clojure.set :refer [difference]]
-            [clojure.string :refer [replace]]
-            [image-lib.helper :refer [version-name
-                                      project-name]])
-  (:gen-class))
+  (:gen-class)
+  (:require [clojure.set :refer [difference]]
+            [image-lib.helper :refer [project-name
+                                      version-name
+                                      image-path]]
+            [monger.collection :as mc]
+            [monger.core :as mg]
+            [monger.operators :refer :all]))
 
 (def database                   "photos")
 (def keyword-collection       "keywords")
@@ -152,14 +151,6 @@
   [db image-collection keyword-collection given-keyword]
   (let [keywords (find-sub-keywords db keyword-collection given-keyword)]
     (flatten (map #(find-images db image-collection "Keywords" %) keywords))))
-
-(defn image-path
-  "return a string containing the year/month/project/version path of an image"
-  [image-map]
-  (str (:Year image-map) "/"
-       (:Month image-map) "/"
-       (:Project image-map) "/"
-       (:Version image-map) ".jpg"))
 
 (defn image-paths
   "Returns the path of every image in the database"
