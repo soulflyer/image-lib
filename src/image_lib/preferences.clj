@@ -1,5 +1,6 @@
 (ns image-lib.preferences
-  (:require [monger.collection :as mc]))
+  (:require [monger.collection :as mc]
+            [monger.operators :refer [$set]]))
 
 (defn preference
   "return the value of the preference from the db"
