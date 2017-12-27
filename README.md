@@ -81,9 +81,11 @@ This is a standalone keyword browser. It allows for creating and rearranging key
 0.1.1-SNAPSHOT Functions now take a database rather than a string so every call doesn't have to re-establish a connection to mongo
 0.1.2-SNAPSHOT
 0.1.3-SNAPSHOT added fns to deal with orphaned keywords
+0.2.1-SNAPSHOT
+0.2.2-SNAPSHOT Breaking changes. Namespace split into smaller pieces.
 
 ## License
 
-Copyright Iain Wood © 2015-2016
+Copyright Iain Wood © 2015-2017
 
 Distributed under the Eclipse Public License version 1.0 

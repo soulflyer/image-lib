@@ -1,7 +1,7 @@
 (ns image-lib.projects
   (:require [image-lib.helper :refer [image-path
                                       project-name]]
-            [image-lib.core   :refer [image-paths]]
+            [image-lib.images   :refer [image-paths]]
             [monger.collection :as mc]))
 
 (defn project-images

@@ -62,3 +62,9 @@
        (:Month image-map) "/"
        (:Project image-map) "/"
        (:Version image-map) ".jpg"))
+
+(defn best
+  "returns the last item of images when sorted by :Rating"
+  [images]
+  (last
+   (sort-by :Rating images)))

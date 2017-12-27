@@ -1,8 +1,9 @@
 (ns image-lib.search
   (:refer-clojure :exclude [or and])
-  (:require [image-lib.core :refer [image-path]]
-            [image-lib.helper :refer [clean-number-string
-                                      string-number-equals]]))
+  (:require
+   [image-lib.helper :refer [image-path
+                             clean-number-string
+                             string-number-equals]]))
 
 (defn eq [image-seq meta-key & meta-value]
   ;; If the last param is nil or missing, just return the image-seq
