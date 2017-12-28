@@ -6,7 +6,7 @@ A Clojure library designed to retrieve data about images and keywords from a mon
 
 Although this project is intended as a library, it can be quite useful to directly manipulate the mongo database, particularly during development af a project making use of it. 
 
-### Getting started
+## Getting started
 
 Using emacs and cider, do M-x cider-jack-in from the project file. This probably works fine from any file in the project directory but opening the project file makes it easy to be sure you are in the right clojure proj, especially when working in several at the same time.
 
@@ -17,15 +17,15 @@ Make sure the options are all set to the correct database and file paths. Each f
 - images collection:      images
 - preferences collection: preferences
 
-### Namespaces
+## Namespaces
 
 Image-lib is now in several different namespaces.
 
-#### image-lib.config
+### image-lib.config
 
 This is the database setup stuff, including the names of the tables used and a connection to the database. 
 
-#### image-lib.helper
+### image-lib.helper
 
 This contains various useful functions for manipulating records returned from the database. No database access is done here.
 
@@ -45,7 +45,7 @@ This contains various useful functions for manipulating records returned from th
 
   **version-name** Cuts the extension off the end of a string
 
-#### image-lib.file-helper
+### image-lib.file-helper
 
 This contains various functions for accessing files in the local file system.
 
@@ -61,7 +61,7 @@ This contains various functions for accessing files in the local file system.
   
   **write** Append the collection 'things' to file 'file-name' one per line
 
-#### image-lib.images
+### image-lib.images
 
   **all-image-paths** Returns the path of every image in the database
   
@@ -73,7 +73,7 @@ This contains various functions for accessing files in the local file system.
   
   **open-images** open the given images in an external viewer
 
-#### image-lib.keywords
+### image-lib.keywords
 
 Contains functions for manipulating the table of keywords.
 
@@ -97,7 +97,7 @@ Contains functions for manipulating the table of keywords.
   
   **safe-delete-keyword** Delete a keyword, but only if it has no sub keywords
 
-#### image-lib.preferences
+### image-lib.preferences
 
 Contains functions for accessing the preferences table
 
@@ -107,7 +107,7 @@ Contains functions for accessing the preferences table
   
   **preferences** return all the preferences
 
-#### image-lib.projects
+### image-lib.projects
 
 Contains functions for accessing the projects table.
 
@@ -117,7 +117,7 @@ Contains functions for accessing the projects table.
 
   **project-paths** returns paths of all images in a given project
 
-#### image-lib.search
+### image-lib.search
 
 Contains functions for building queries to search the database for images.
 
@@ -139,7 +139,7 @@ Contains functions for building queries to search the database for images.
 
   **or** Not documented.
 
-#### image-lib.core
+### image-lib.core
 
 Contains the more complex functions used for manipulating the database. This section is likely to be changed.
 
