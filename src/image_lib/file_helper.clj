@@ -1,6 +1,5 @@
 (ns image-lib.file-helper
-  (:require [image-lib.helper :refer [version-name]]
-            [image-lib.images :refer [image-paths]]))
+  (:require [image-lib.helper :refer [version-name image-paths]]))
 
 (defn file-exists?
   [path]
@@ -33,3 +32,14 @@
   (remove
     (fn [im] (find-function (str root-path "/" im)))
     (image-paths db image-collection)))
+
+(defn write
+  "Append the collection 'things' to file 'file-name' one per line"
+  [things file-name]
+  (map #(spit file-name (str % "\n") :append true) things))
+
+(defn overwrite
+  "Write the collection to a file, clearing it first"
+  [things file-name]
+  (spit file-name "" :append false)
+  (write things file-name))

@@ -1,7 +1,9 @@
 (ns image-lib.images
-  (:require [monger.collection :as mc]
-            [monger.operators  :refer :all]
-            [image-lib.helper :refer [image-path]]))
+  (:require [monger.collection  :as mc]
+            [monger.operators   :refer :all]
+            [image-lib.helper   :refer [image-path]]
+            [clojure.java.shell :refer [sh]]
+            [clojure.string     :as str]))
 
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
@@ -20,7 +22,15 @@
   [database image-collection field value]
   (mc/find-maps database image-collection {field {$regex value}}))
 
-(defn image-paths
+(defn all-image-paths
   "Returns the path of every image in the database"
   [db image-collection]
   (map image-path (mc/find-maps db image-collection {})))
+
+(defn open-images
+  "open the given images in an external viewer"
+  [pics base-directory external-viewer]
+  (doall (sh "xargs" external-viewer
+        :in (str/join " " (map #(str base-directory "/" %)
+                               (map image-path pics))))
+          (shutdown-agents)))

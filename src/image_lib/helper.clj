@@ -63,6 +63,11 @@
        (:Project image-map) "/"
        (:Version image-map) ".jpg"))
 
+(defn image-paths
+  "given a collection of pics, return just the paths"
+  [pics]
+  (map image-path pics))
+
 (defn best
   "returns the last item of images when sorted by :Rating"
   [images]

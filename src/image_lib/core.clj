@@ -1,8 +1,8 @@
 (ns image-lib.core
   (:gen-class)
   (:require [clojure.set :refer [difference]]
-            [image-lib.helper :refer [image-path version-name best]]
-            [image-lib.images :refer [find-images image-paths]]
+            [image-lib.helper :refer [version-name best]]
+            [image-lib.images :refer [find-images]]
             [image-lib.keywords :as kw]
             [monger.collection :as mc]
             [monger.core :as mg]

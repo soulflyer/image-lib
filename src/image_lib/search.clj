@@ -1,9 +1,9 @@
 (ns image-lib.search
   (:refer-clojure :exclude [or and])
-  (:require
-   [image-lib.helper :refer [image-path
+  (:require [image-lib.helper :refer [image-path
                              clean-number-string
-                             string-number-equals]]))
+                                      string-number-equals]]
+            [clojure.set :refer [union]]))
 
 (defn eq [image-seq meta-key & meta-value]
   ;; If the last param is nil or missing, just return the image-seq
@@ -73,11 +73,6 @@
 ;;    (sh "xargs" external-viewer
 ;;        :in (str/join " " (map #(str size "/" %)
 ;;                               (map image-path pics))))))
-
-(defn paths
-  "given a collection of pics, return just the paths"
-  [pics]
-  (map image-path pics))
 
 (defn write
   "Append the collection 'things' to file 'file-name' one per line"
