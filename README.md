@@ -4,11 +4,9 @@ A Clojure library designed to retrieve data about images and keywords from a mon
 
 ## Usage
 
-Although this project is intended as a library, it can be quite useful to directly manipulate the mongo database, particularly during development af a project making use of it. 
+This is a library for inclusion in other projects. It can be run alone, using the cofig.clj file to set up connections to the database. However it is easier to use from within another project. Checkout http://github/soulflyer/image-search for an easy introduction. This contains both a standalone commandline utility and a repl based search. It also has some handy useage information.
 
 ## Getting started
-
-Using emacs and cider, do M-x cider-jack-in from the project file. This probably works fine from any file in the project directory but opening the project file makes it easy to be sure you are in the right clojure proj, especially when working in several at the same time.
 
 Make sure the options are all set to the correct database and file paths. Each function can take parameters to specify these, but that will be a whole lot of extra typing you don't really want to have to do. Options are mostly set in the preferences collection of the database. The database and tables are specified in core.clj and it is probably easiest just to use the values there. They are reasonably sensible.
 
@@ -29,115 +27,115 @@ This is the database setup stuff, including the names of the tables used and a c
 
 This contains various useful functions for manipulating records returned from the database. No database access is done here.
 
-  **best** returns the last item of images when sorted by :Rating
+  * **best** returns the last item of images when sorted by :Rating
 
-  **clean-number-string** returns a number when given a string. 
+  * **clean-number-string** returns a number when given a string. 
 
-  **image-path** return a string containing the year/month/project/version path of an image
+  * **image-path** return a string containing the year/month/project/version path of an image
 
-  **image-paths** given a collection of pics, return just the paths
+  * **image-paths** given a collection of pics, return just the paths
 
-  **project-name** cuts the last part of the pathname off to leave yyyy/mm/project-name
+  * **project-name** cuts the last part of the pathname off to leave yyyy/mm/project-name
 
-  **project-year** returns the year from a project name in the form yyyy/mm/project
+  * **project-year** returns the year from a project name in the form yyyy/mm/project
 
-  **string-number-equals** a version of = that can compare numbers, strings or one of each
+  * **string-number-equals** a version of = that can compare numbers, strings or one of each
 
-  **version-name** Cuts the extension off the end of a string
+  * **version-name** Cuts the extension off the end of a string
 
 ### image-lib.file-helper
 
 This contains various functions for accessing files in the local file system.
 
-  **file-exists?** Not documented.
+  * **file-exists?** Not documented.
   
-  **missing-files** Searches the directory given by root-path and returns a list of any images not found there but present in the image db. 
+  * **missing-files** Searches the directory given by root-path and returns a list of any images not found there but present in the image db. 
   
-  **related-file-exists?** Not documented.
+  * **related-file-exists?** Not documented.
   
-  **loosely-related-file-exists?** given a pathname to a file, checks if any variant of the file exists...
+  * **loosely-related-file-exists?** given a pathname to a file, checks if any variant of the file exists...
   
-  **overwrite** Write the collection to a file, clearing it first
+  * **overwrite** Write the collection to a file, clearing it first
   
-  **write** Append the collection 'things' to file 'file-name' one per line
+  * **write** Append the collection 'things' to file 'file-name' one per line
 
 ### image-lib.images
 
-  **all-image-paths** Returns the path of every image in the database
+  * **all-image-paths** Returns the path of every image in the database
   
-  **find-image** returns an image given its id
+  * **find-image** returns an image given its id
   
-  **find-images** Searches database collection for entries where the given field matches the given value
+  * **find-images** Searches database collection for entries where the given field matches the given value
   
-  **find-images-containing** Searches database collection for entries where the given field contains the given value
+  * **find-images-containing** Searches database collection for entries where the given field contains the given value
   
-  **open-images** open the given images in an external viewer
+  * **open-images** open the given images in an external viewer
 
 ### image-lib.keywords
 
 Contains functions for manipulating the table of keywords.
 
-  **add-keyword** Add a new keyword
+  * **add-keyword** Add a new keyword
   
-  **all-keywords** returns all the keyword ids
+  * **all-keywords** returns all the keyword ids
   
-  **all-sub-keywords** Not documented.
+  * **all-sub-keywords** Not documented.
   
-  **delete-keyword** Remove a keyword
+  * **delete-keyword** Remove a keyword
   
-  **disconnect-keyword** Removes keyword from parent keyword but doesn't delete it
+  * **disconnect-keyword** Removes keyword from parent keyword but doesn't delete it
   
-  **find-keyword** Not documented.
+  * **find-keyword** Not documented.
   
-  **find-parents** given a keyword, returns a list of the parents
+  * **find-parents** given a keyword, returns a list of the parents
   
-  **find-sub-keywords** given a keyword entry returns a list of all the sub keywords
+  * **find-sub-keywords** given a keyword entry returns a list of all the sub keywords
   
-  **move-keyword** Move a keyword from one parent to another
+  * **move-keyword** Move a keyword from one parent to another
   
-  **safe-delete-keyword** Delete a keyword, but only if it has no sub keywords
+  * **safe-delete-keyword** Delete a keyword, but only if it has no sub keywords
 
 ### image-lib.preferences
 
 Contains functions for accessing the preferences table
 
-  **preference** return the value of the preference from the db
+  * **preference** return the value of the preference from the db
   
-  **preference!** set the value of preference in the db
+  * **preference!** set the value of preference in the db
   
-  **preferences** return all the preferences
+  * **preferences** return all the preferences
 
 ### image-lib.projects
 
 Contains functions for accessing the projects table.
 
-  **all-projects** returns a list of all the projects in yyyy/mm/project-name form
+  * **all-projects** returns a list of all the projects in yyyy/mm/project-name form
 
-  **project-images** Returns all the images from a given project
+  * **project-images** Returns all the images from a given project
 
-  **project-paths** returns paths of all images in a given project
+  * **project-paths** returns paths of all images in a given project
 
 ### image-lib.search
 
 Contains functions for building queries to search the database for images.
 
-  **and** Not documented.
+  * **and** Not documented.
 
-  **contains** returns true if haystack contains needle. 
+  * **contains** returns true if haystack contains needle. 
 
-  **eq** Not documented.
+  * **eq** Not documented.
 
-  **ge** Not documented.
+  * **ge** Not documented.
 
-  **gt** Not documented.
+  * **gt** Not documented.
 
-  **in** returns a sequence containing all entries of image-seq where meta-key contains meta-value
+  * **in** returns a sequence containing all entries of image-seq where meta-key contains meta-value
 
-  **le** Not documented.
+  * **le** Not documented.
 
-  **lt** Not documented.
-
-  **or** Not documented.
+  * **lt** Not documented.
+   
+  * **or** Not documented.
 
 ### image-lib.core
 

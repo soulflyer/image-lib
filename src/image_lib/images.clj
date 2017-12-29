@@ -30,7 +30,6 @@
 (defn open-images
   "open the given images in an external viewer"
   [pics base-directory external-viewer]
-  (doall (sh "xargs" external-viewer
-        :in (str/join " " (map #(str base-directory "/" %)
-                               (map image-path pics))))
-          (shutdown-agents)))
+  (sh "xargs" external-viewer
+      :in (str/join " " (map #(str base-directory "/" %)
+                             (map image-path pics)))))
