@@ -4,7 +4,7 @@ A Clojure library designed to retrieve data about images and keywords from a mon
 
 ## Usage
 
-This is a library for inclusion in other projects. It can be run alone, using the cofig.clj file to set up connections to the database. However it is easier to use from within another project. Checkout http://github/soulflyer/image-search for an easy introduction. This contains both a standalone commandline utility and a repl based search. It also has some handy useage information.
+This is a library for inclusion in other projects. It can be run alone, using the cofig.clj file to set up connections to the database. However it is easier to use from within another project. Checkout http://github.com/soulflyer/image-search for an easy introduction. This contains both a standalone commandline utility and a repl based search. It also has some handy useage information.
 
 ## Getting started
 
