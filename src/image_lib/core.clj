@@ -2,11 +2,27 @@
   (:gen-class)
   (:require [clojure.set :refer [difference]]
             [image-lib.helper :refer [version-name best]]
-            [image-lib.images :refer [find-images]]
+            [image-lib.images :refer [find-images
+                                      find-image]]
             [image-lib.keywords :as kw]
             [monger.collection :as mc]
             [monger.core :as mg]
             [monger.operators :refer :all]))
+(defn add-keyword-to-photo
+  "Adds <keyword> to the keywords field of <photo> in the images table."
+  ([db image-collection keyword photoid]
+   (let [img (find-image db image-collection photoid)]
+     (mc/update db image-collection img {$addToSet {:Keywords keyword}})))
+  ([db image-collection keyword year month project photo]
+   (add-keyword-to-photo db image-collection keyword (str year month project photo))))
+
+(defn remove-keyword-from-photo
+  "Deletes <keyword> from the keyword field of <photo> in the image table."
+  ([db image-collection keyword photoid]
+   (let [img (find-image db image-collection photoid)]
+     (mc/update db image-collection img {$pull {:Keywords keyword}})))
+  ([db image-collection keyword year month project photo]
+   (remove-keyword-from-photo db image-collection keyword (str year month project photo))))
 
 (defn remove-keyword-from-photos
   "removes a given keyword from the keywords field of all images"

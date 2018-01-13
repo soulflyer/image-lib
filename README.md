@@ -157,7 +157,7 @@ Adds the keywords found by missing-keywords to the db under the keyword "orphane
 
     (orphaned-keywords)
     
-Returns a list of all the keywords found in the pictures collection that are not in the keywords collection.
+Returns a list of all the keywords found in the pictures collection that don't appear as sub-keywords of any other keyword.
 
 ##### add-orphaned-keywords
 
