@@ -1,8 +1,8 @@
 (ns image-lib.projects
-  (:require [image-lib.helper :refer [image-path
-                                      image-paths
-                                      project-name]]
-            ;; [image-lib.images   :refer [image-paths]]
+  (:require [image-lib.helper  :refer [image-path
+                                       image-paths
+                                       project-name]]
+            [image-lib.images  :refer [all-image-paths]]
             [monger.collection :as mc]))
 
 (defn project-images
@@ -18,4 +18,4 @@
 (defn all-projects
   "returns a list of all the projects in yyyy/mm/project-name form"
   [db image-collection]
-  (sort (set (map project-name (image-paths db image-collection)))))
+  (sort (set (map project-name (all-image-paths db image-collection)))))
