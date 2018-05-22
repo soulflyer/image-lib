@@ -5,6 +5,15 @@
             [clojure.java.shell :refer [sh]]
             [clojure.string     :as str]))
 
+(defn images
+  "Returns all the images from a given year month project"
+  ([database image-collection year]
+   (mc/find-maps database image-collection {:Year year}))
+  ([database image-collection year month]
+   (mc/find-maps database image-collection {:Year year :Month month}))
+  ([database image-collection year month project]
+   (mc/find-maps database image-collection {:Year year :Month month :Project project})))
+
 (defn find-images
   "Searches database collection for entries where the given field matches the given value"
   [database image-collection field value]
