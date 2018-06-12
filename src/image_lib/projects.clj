@@ -6,7 +6,7 @@
             [monger.collection :as mc]))
 
 (defn project-images
-  "Returns all the images from a given project"
+  "Deprecated. Use image-lib.images/images instead. Returns all the images from a given project"
   [database image-collection year month project]
   (mc/find-maps database image-collection {:Year year :Month month :Project project}))
 
