@@ -1,13 +1,12 @@
 (ns image-lib.core
   (:gen-class)
-  (:require [clojure.set :refer [difference]]
-            [image-lib.helper :refer [version-name best]]
-            [image-lib.images :refer [find-images
-                                      find-image]]
+  (:require [clojure.set        :refer [difference]]
+            [image-lib.helper   :refer [best]]
+            [image-lib.images   :refer [find-image find-images]]
             [image-lib.keywords :as kw]
-            [monger.collection :as mc]
-            [monger.core :as mg]
-            [monger.operators :refer :all]))
+            [monger.collection  :as mc]
+            [monger.operators   :refer :all]))
+
 (defn add-keyword-to-photo
   "Adds <keyword> to the keywords field of <photo> in the images table."
   ([db image-collection keyword photoid]
