@@ -61,6 +61,7 @@
   (str (:Year image-map) "/"
        (:Month image-map) "/"
        (:Project image-map) "/"
+       ;;TODO This probably shouldn't have .jpg on the end
        (:Version image-map) ".jpg"))
 
 (defn image-paths

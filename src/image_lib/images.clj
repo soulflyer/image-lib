@@ -2,6 +2,7 @@
   (:require [monger.collection  :as mc]
             [monger.operators   :refer :all]
             [image-lib.helper   :refer [image-path]]
+            [image-lib.keywords :as kw]
             [clojure.java.shell :refer [sh]]
             [clojure.string     :as str]))
 
@@ -25,6 +26,12 @@
    (mc/find-one-as-map db collection {:_id id}))
   ([db collection year month project pic]
    (find-image db collection (str year month project pic))))
+
+(defn find-all-images
+  "Given a keyword searches the database for images containing it or any of its sub keywords"
+  [db image-collection keyword-collection given-keyword]
+  (let [keywords (kw/find-sub-keywords db keyword-collection given-keyword)]
+    (flatten (map #(find-images db image-collection "Keywords" %) keywords))))
 
 (defn find-images-containing
   "Searches database collection for entries where the given field contains the given value"

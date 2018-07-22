@@ -10,11 +10,11 @@
     (mc/update db image-collection img {$set {field value}})))
 
 (defn write-title
-  "Writes a string to the :Object-Name field of a photo entry in the db"
+  "Deprecated: use write-to-photo instead. Writes a string to the :Object-Name field of a photo entry in the db"
   [db image-collection photoid value]
   (write-to-photo db image-collection photoid :Object-Name value))
 
 (defn write-caption
-  "Writes a string to the :Caption field of a photo entry in the db"
+  "Deprecated: use write-to-photo instead. Writes a string to the :Caption field of a photo entry in the db"
   [db image-collection photoid value]
   (write-to-photo db image-collection photoid :Caption-Abstract value))

@@ -2,7 +2,9 @@
   (:gen-class)
   (:require [clojure.set        :refer [difference]]
             [image-lib.helper   :refer [best]]
-            [image-lib.images   :refer [find-image find-images]]
+            [image-lib.images   :refer [find-image
+                                        find-images
+                                        find-all-images]]
             [image-lib.keywords :as kw]
             [monger.collection  :as mc]
             [monger.operators   :refer :all]))
@@ -57,11 +59,6 @@
      (replace-keyword-in-photos db image-collection dispose-keyword keep-keyword)
      (kw/delete-keyword db keyword-collection dispose-keyword))))
 
-(defn find-all-images
-  "Given a keyword searches the database for images containing it or any of its sub keywords"
-  [db image-collection keyword-collection given-keyword]
-  (let [keywords (kw/find-sub-keywords db keyword-collection given-keyword)]
-    (flatten (map #(find-images db image-collection "Keywords" %) keywords))))
 
 (defn used-keywords
   "returns a set of all keywords found in the given database of images"
