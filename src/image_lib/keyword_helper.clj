@@ -1,4 +1,5 @@
 (ns image-lib.keyword-helper
+  "All these fns are in image-lib.keywords Should probably remove this ns"
   (:require [monger.collection :as mc]
             [monger.operators :refer :all]))
 

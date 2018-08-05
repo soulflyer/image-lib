@@ -63,6 +63,7 @@
 (defn used-keywords
   "returns a set of all keywords found in the given database of images"
   [db image-collection]
+  ;; TODO find out if reduce realizes the whole seq or not
   (reduce #(set (concat %1 %2))
           (map :Keywords (mc/find-maps db image-collection {} [:Keywords]))))
 
@@ -85,7 +86,8 @@
   ([db image-collection keyword-collection root-keyword]
    (let [_ (kw/add-keyword db keyword-collection root-keyword "Root")
          missing (missing-keywords db image-collection keyword-collection)]
-     (map #(kw/add-keyword db keyword-collection % root-keyword) missing)))
+     (println "hello from add-missing-keywords")
+     (dorun (map #(kw/add-keyword db keyword-collection % root-keyword) missing))))
   ([db image-collection keyword-collection]
    (add-missing-keywords db image-collection keyword-collection "orphaned keywords")))
 
@@ -106,4 +108,5 @@
 
 (defn add-orphaned-keywords
   [db kc]
-  (map #(kw/add-keyword db kc % "orphaned keywords") (difference (orphaned-keywords) #{"Root"})))
+  (dorun (map #(kw/add-keyword db kc % "orphaned keywords")
+              (difference (orphaned-keywords) #{"Root"}))))

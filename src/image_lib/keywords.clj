@@ -34,6 +34,11 @@
   (mc/update db keyword-collection {:_id new-parent} {$addToSet {:sub kw}})
   (mc/update db keyword-collection {:_id old-parent} {$pull {:sub kw}}))
 
+(defn add-sample
+  "Adds a sample image to a keyword"
+  [db keyword-collection kw sample]
+  (mc/update db keyword-collection {:_id kw} {$set {:sample sample}}))
+
 (defn find-parents
   "given a keyword, returns a list of the parents"
   [db keyword-collection kw]
