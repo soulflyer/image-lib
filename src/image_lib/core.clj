@@ -67,6 +67,10 @@
   (reduce #(set (concat %1 %2))
           (map :Keywords (mc/find-maps db image-collection {} [:Keywords]))))
 
+;; TODO define a fn that returns all the used keywords including parents so
+;; unused-keywords can return only the genuinely unused kws, not all the
+;; intermediate ones that don't have any direct uses.
+
 (defn unused-keywords
   "returns a set of all keywords found in the keyword-collection but not present in any images"
   [db image-collection keyword-collection]
@@ -109,4 +113,4 @@
 (defn add-orphaned-keywords
   [db kc]
   (dorun (map #(kw/add-keyword db kc % "orphaned keywords")
-              (difference (orphaned-keywords) #{"Root"}))))
+              (difference (orphaned-keywords db kc) #{"Root"}))))

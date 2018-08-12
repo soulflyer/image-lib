@@ -56,7 +56,8 @@
    (mc/update db keyword-collection {:_id parent} {$pull {:sub kw}}))
   ([db keyword-collection kw]
    (let [parents (map :_id (find-parents db keyword-collection kw))]
-     (doall (map #(delete-keyword db keyword-collection kw %) parents)))))
+     (doall (map #(delete-keyword db keyword-collection kw %) parents))
+     (str kw))))
 
 (defn safe-delete-keyword
   "Delete a keyword, but only if it has no sub keywords"
@@ -77,6 +78,6 @@
 (defn all-sub-keywords
   [database kw-collection ]
   (reduce
-    (fn [a b] (concat a (:sub (find-keyword b))))
+    (fn [a b] (concat a (:sub (find-keyword database kw-collection b))))
     #{}
     (all-keywords database kw-collection)))
