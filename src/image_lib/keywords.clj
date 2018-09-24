@@ -44,6 +44,23 @@
   [db keyword-collection kw]
   (mc/find-maps db keyword-collection {:sub kw}))
 
+(defn parent
+  "given a keyword returns the _id of the parent"
+  [db keyword-collection kw]
+  (:_id (first (find-parents db keyword-collection kw))))
+
+(defn keyword-path
+  "Given a keyword, returns it's full path as a vector"
+  [db keyword-collection kw]
+  (vec
+    (reverse
+      (loop [kw kw
+             acc []]
+        (if (= kw "Root")
+          acc
+          (recur (parent db keyword-collection kw)
+                 (conj acc kw)))))))
+
 (defn disconnect-keyword
   "Removes keyword from parent keyword but doesn't delete it"
   [db keyword-collection keyword parent]
