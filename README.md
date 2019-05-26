@@ -195,7 +195,11 @@ given a pathname, checks that every image in the db is present under that path.
 
 ### keywords
 http://github.com/soulflyer/find-pics
-This is a standalone keyword browser. It allows for creating and rearranging keywords, browsing the keyword heirarchy, and viewing pictures with selected keywords. It can also output a list of images for further processing.
+(Deprecated, use hinh-anh instead) This is a standalone keyword browser. It allows for creating and rearranging keywords, browsing the keyword heirarchy, and viewing pictures with selected keywords. It can also output a list of images for further processing.
+
+### hinh-anh
+http://github.com/soulflyer/hinh-anh
+GUI app for browsing photos and editing their metadata.
 
 ## Versions
 

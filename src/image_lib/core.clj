@@ -40,7 +40,7 @@
     (remove-keyword-from-photos db image-collection old-keyword)))
 
 (defn rename-keyword
-  "Changes the keyword including any references in parents. If given the image-collection it will also change the keyword in the :Keyword field of every matching entry in the image-collection. Doesn't change the original images. Note that the short form also changes the image collectoion."
+  "Changes the keyword including any references in parents. If given the image-collection it will also change the keyword in the :Keyword field of every matching entry in the image-collection. Doesn't change the original images."
   ([db keyword-collection old-keyword new-keyword]
    (let [parents (kw/find-parents db keyword-collection old-keyword)
          parent  (:_id (first parents))

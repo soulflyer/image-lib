@@ -1,7 +1,7 @@
 (ns image-lib.config
   (:require [monger.core :as mg]))
 
-(def database                   "photo_api_dev")
+(def database                   "photos")
 (def keyword-collection       "keywords")
 (def preference-collection "preferences")
 (def image-collection           "images")
