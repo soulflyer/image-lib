@@ -1,4 +1,4 @@
-(defproject image-lib "0.2.3"
+(defproject image-lib "0.2.4"
   :description "A collection of functions to retrieve data about images and keywords from a mongo database"
   :url "http://github.com/soulflyer/image-lib"
   :license {:name "Eclipse Public License"

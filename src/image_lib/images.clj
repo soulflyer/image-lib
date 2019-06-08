@@ -47,5 +47,5 @@
   "open the given images in an external viewer"
   [pics base-directory external-viewer]
   (sh "xargs" external-viewer
-      :in (str/join " " (map #(str base-directory "/" %)
-                             (map image-path pics)))))
+    :in (str/join " " (map #(str base-directory "/" %)
+                        (map image-path pics)))))

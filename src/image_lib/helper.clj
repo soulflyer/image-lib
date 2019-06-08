@@ -59,9 +59,9 @@
   "return a string containing the year/month/project/version path of an image"
   [image-map]
   (str (:Year image-map) "/"
-       (:Month image-map) "/"
-       (:Project image-map) "/"
-       (:Version image-map)))
+    (:Month image-map) "/"
+    (:Project image-map) "/"
+    (:Version image-map) ".jpg"))
 
 (defn image-paths
   "given a collection of pics, return just the paths"

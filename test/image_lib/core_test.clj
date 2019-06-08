@@ -16,25 +16,25 @@
 
 (def db (mg/get-db (mg/connect) "test"))
 (expect "Rachael"
-        (is/in (kw/find-sub-keywords db "keywords" "people")))
-(expect {:foo 1} (is/in {:foo 1 :cat 4}))
+  (in (kw/find-sub-keywords db "keywords" "people")))
+(expect {:foo 1} (in {:foo 1 :cat 4}))
 (expect {:_id "1"}
-        (is/in (first
-                 (im/find-images db  "images" "Keywords" "Kathryn"))))
+  (in (first
+        (im/find-images db  "images" "Keywords" "Kathryn"))))
 (expect {:_id "1"}
-        (is/in (first
-                 (im/find-images-containing db "images" "Keywords" "Kat"))))
+  (in (first
+        (im/find-images-containing db "images" "Keywords" "Kat"))))
 (expect {:_id "2"}
-        (is/in
-          (last
-            (sort-by :Rating
-                     (ic/find-all-images db "images" "keywords" "people")))))
+  (in
+    (last
+      (sort-by :Rating
+        (im/find-all-images db "images" "keywords" "people")))))
 (expect "1958/10/12-Test-Project/DIW_002.jpg"
-        (ih/image-path
-          (last
-            (sort-by
-              :Rating
-              (im/find-images db "images" "Keywords" "Iain")))))
+  (ih/image-path
+    (last
+      (sort-by
+        :Rating
+        (im/find-images db "images" "Keywords" "Iain")))))
 (expect "DIW_123"
         (ih/version-name "/2015/02/09-Project/DIW_123.jpg"))
 (expect "clojure-test"
@@ -51,9 +51,8 @@
 (expect (ih/best [{:_id 1 :Rating "2.0"}
                   {:_id 2 :Rating "3.0"}])
         {:_id 2 :Rating "3.0"})
-(expect (ih/image-path (best-image db "images" "Iain"))
-        "1958/10/12-Test-Project/DIW_002.jpg")
-(expect (ih/image-path (best-image db "images" "keywords" "people"))
-        "1981/10/18-Test-Project/DIW_002.jpg")
+(expect (ih/image-path (ic/best-image db "images" "Iain"))
+  "1958/10/12-Test-Project/DIW_002.jpg")
+
 (expect (pr/preference db "preferences" "masters-directory")
-        "/Users/iain/Pictures")
+  "/Users/iain/Pictures")
