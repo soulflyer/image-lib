@@ -5,4 +5,5 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [com.novemberain/monger "3.1.0"]]
-  :profiles {:dev {:dependencies [[expectations "2.1.9"]]}})
+  :profiles {:dev {:dependencies [[expectations "2.1.9"]
+                                  [expectations/clojure-test "1.1.1"]]}})

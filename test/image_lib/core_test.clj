@@ -10,9 +10,12 @@
             [monger
              [collection :as mc]
              [core :as mg]]
-            [expectations :refer :all])
-  ;;(:use expectations)
-  )
+            ;; TODO Need to switch to clojure-test expectations but that means using deftest first
+            ;;[expectations.clojure.test :refer :all]
+            [expectations :refer :all]            ))
+
+;; TODO Add fixtures. First sort out the config using mount?
+;; (use-fixtures :once ??)
 
 (def db (mg/get-db (mg/connect) "test"))
 (expect "Rachael"
@@ -50,7 +53,7 @@
 (expect 3 (count (ip/all-projects db "images")))
 (expect (ih/best [{:_id 1 :Rating "2.0"}
                   {:_id 2 :Rating "3.0"}])
-        {:_id 2 :Rating "3.0"})
+  {:_id 2 :Rating "3.0"})
 (expect (ih/image-path (ic/best-image db "images" "Iain"))
   "1958/10/12-Test-Project/DIW_002.jpg")
 
