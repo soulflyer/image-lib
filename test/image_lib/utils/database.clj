@@ -1,4 +1,4 @@
-(ns image-lib.fixtures.database
+(ns image-lib.utils.database
   (:require [monger.collection :as mc]
             [monger.core :as mg]))
 
@@ -20,9 +20,9 @@
 
 (defn empty-tables!
   ([]
-   (empty-tables! db-name tables))
+   (empty-tables! (connect db-name) tables))
   ([db tables]
-   (map #(mc/remove db %) tables)))
+   (doall (map #(mc/remove db %) tables))))
 
 
 (defn connection

@@ -14,7 +14,6 @@
             ;;[expectations.clojure.test :refer :all]
             [expectations :refer :all]            ))
 
-;; TODO Add fixtures. First sort out the config using mount?
 ;; (use-fixtures :once ??)
 
 (def db (mg/get-db (mg/connect) "test"))

@@ -1,13 +1,16 @@
-(ns image-lib.fixtures.seed
-  (:require ;;[image-lib.fixtures.database :refer [db]]
-            [monger [collection :as mc]]))
+(ns image-lib.utils.database.seed
+  (:require [image-lib.utils.database :refer [connection]]
+            [monger.collection :as mc]))
 
-(defn seed-preferences
-  [db]
-  (mc/insert-batch db "preferences" [{:_id  "masters-directory"
-                                      :path "/Users/iain/Pictures"}]))
+(defn preferences
+  ([]
+   (preferences (connection)))
+  ([db]
+   (mc/insert-batch db "preferences" [{:_id  "masters-directory"
+                                       :path "/Users/iain/Pictures"}])))
 
-(defn seed-images
+
+(defn images
   [db]
   (mc/insert-batch db "images" [{:_id "1"
                                  :Year "1983"
@@ -38,7 +41,7 @@
                                  :Keywords ["Iain"]
                                  :rating "4.0"}]))
 
-(defn seed-keywords
+(defn keywords
   [db]
   (mc/insert-batch db "keywords" [{:_id "people" :sub ["Kathryn" "Iain" "Rachael"]}
                                   {:_id "Kathryn" :sub []}
