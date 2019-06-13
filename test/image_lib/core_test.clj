@@ -55,6 +55,3 @@
   {:_id 2 :Rating "3.0"})
 (expect (ih/image-path (ic/best-image db "images" "Iain"))
   "1958/10/12-Test-Project/DIW_002.jpg")
-
-(expect (pr/preference db "preferences" "masters-directory")
-  "/Users/iain/Pictures")
