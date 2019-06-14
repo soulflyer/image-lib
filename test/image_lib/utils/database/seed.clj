@@ -6,6 +6,7 @@
   ([]
    (preferences (connection)))
   ([db]
+   (println "Seeding Preferences")
    (mc/insert-batch db "preferences" [{:_id  "masters-directory"
                                        :path "/Users/iain/Pictures"}])))
 
@@ -42,8 +43,11 @@
                                  :rating "4.0"}]))
 
 (defn keywords
-  [db]
-  (mc/insert-batch db "keywords" [{:_id "people" :sub ["Kathryn" "Iain" "Rachael"]}
-                                  {:_id "Kathryn" :sub []}
-                                  {:_id "Iain" :sub []}
-                                  {:_id "Rachael" :sub []}]))
+  ([]
+   (keywords (connection)))
+  ([db]
+   (println "seeding keywords")
+   (mc/insert-batch db "keywords" [{:_id "people" :sub ["Kathryn" "Iain" "Rachael"]}
+                                   {:_id "Kathryn" :sub []}
+                                   {:_id "Iain" :sub []}
+                                   {:_id "Rachael" :sub []}])))

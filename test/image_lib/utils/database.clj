@@ -6,7 +6,7 @@
 (def conn (atom  nil))
 (def db-name "test")
 (def images "images")
-(def keywords "Keywords")
+(def keywords "keywords")
 (def preferences "preferences")
 (def tables [images keywords preferences])
 
@@ -22,6 +22,7 @@
   ([]
    (empty-tables! (connect db-name) tables))
   ([db tables]
+   (println "emptying " tables)
    (doall (map #(mc/remove db %) tables))))
 
 

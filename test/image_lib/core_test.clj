@@ -17,9 +17,7 @@
 ;; (use-fixtures :once ??)
 
 (def db (mg/get-db (mg/connect) "test"))
-(expect "Rachael"
-  (in (kw/find-sub-keywords db "keywords" "people")))
-(expect {:foo 1} (in {:foo 1 :cat 4}))
+
 (expect {:_id "1"}
   (in (first
         (im/find-images db  "images" "Keywords" "Kathryn"))))
