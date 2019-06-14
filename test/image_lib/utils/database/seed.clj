@@ -47,7 +47,9 @@
    (keywords (connection)))
   ([db]
    (println "seeding keywords")
-   (mc/insert-batch db "keywords" [{:_id "people" :sub ["Kathryn" "Iain" "Rachael"]}
+   (mc/insert-batch db "keywords" [{:_id "people" :sub ["Kathryn" "Iain" "Rachael" "me"]}
                                    {:_id "Kathryn" :sub []}
                                    {:_id "Iain" :sub []}
-                                   {:_id "Rachael" :sub []}])))
+                                   {:_id "Rachael" :sub []}
+                                   {:_id "me" :sub []}
+                                   {:_id "Root" :sub ["people"]}])))

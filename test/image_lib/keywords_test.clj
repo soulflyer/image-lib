@@ -12,11 +12,26 @@
 
 (deftest sub-keywords
   (expect
-    (sort ["people" "Kathryn" "Iain" "Rachael"])
+    (sort ["people" "Kathryn" "Iain" "Rachael" "me"])
     (sort (sut/find-sub-keywords (database/connection) database/keywords "people"))))
 
+
+(deftest move-keyword
+  (expect
+    ["me"]
+    (sut/find-sub-keywords (database/connection) database/keywords "me"))
+  (sut/move-keyword (database/connection) database/keywords "Iain" "people" "me")
+  (expect
+    (sort ["Iain" "me"])
+    (sort (sut/find-sub-keywords (database/connection) database/keywords "me"))))
+
+
+(deftest keyword-path
+  (expect
+    ["people" "me" "Iain"]
+    (sut/keyword-path (database/connection) database/keywords "Iain")))
 
 (deftest parents
   (expect
     "people"
-    (:_id (first (sut/find-parents (database/connection) database/keywords "Iain")))))
+    (sut/parent (database/connection) database/keywords "Iain")))

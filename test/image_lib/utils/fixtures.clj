@@ -11,13 +11,13 @@
 
 (defn seed-preferences
   [f]
+  (database/empty-tables! (database/connection) [database/preferences])
   (seed/preferences)
-  (f)
-  (database/empty-tables! (database/connection) [database/preferences]))
+  (f))
 
 
 (defn seed-keywords
   [f]
+  (database/empty-tables! (database/connection) [database/keywords])
   (seed/keywords)
-  (f)
-  (database/empty-tables! (database/connection) [database/keywords]))
+  (f))
