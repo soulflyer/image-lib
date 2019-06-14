@@ -10,6 +10,13 @@
   fixtures/database fixtures/seed-keywords)
 
 
-(deftest keywords
-  (expect "Rachael"
-    (in (sut/find-sub-keywords (database/connection) database/keywords "people"))))
+(deftest sub-keywords
+  (expect
+    (sort ["people" "Kathryn" "Iain" "Rachael"])
+    (sort (sut/find-sub-keywords (database/connection) database/keywords "people"))))
+
+
+(deftest parents
+  (expect
+    "people"
+    (:_id (first (sut/find-parents (database/connection) database/keywords "Iain")))))
