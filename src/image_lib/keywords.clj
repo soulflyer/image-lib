@@ -19,7 +19,7 @@
   [database keyword-collection given-keyword]
   (let [keyword-entry (first (mc/find-maps database keyword-collection {:_id given-keyword}))]
     (if (empty? keyword-entry)
-      (println (str "Keyword not found: " given-keyword))
+      (println (str "Keyword not found:- " given-keyword))
       (if (= 0 (count (:sub keyword-entry)))
         (conj '() given-keyword)
         (flatten
