@@ -24,6 +24,13 @@
   (f))
 
 
+(defn seed-images
+  [f]
+  (database/empty-tables! (database/connection) [database/images])
+  (seed/images)
+  (f))
+
+
 (defn create-file
   [f]
   (file/create "/tmp/image-lib-file-test.txt")

@@ -6,6 +6,7 @@
             [image-lib.utils.database.seed :as seed]
             [image-lib.utils.fixtures :as fixtures]))
 
+
 (use-fixtures :once
   fixtures/database fixtures/seed-preferences)
 
