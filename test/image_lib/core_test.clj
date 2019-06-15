@@ -1,10 +1,8 @@
 (ns image-lib.core-test
   (:require [image-lib.core        :as ic]
             [image-lib.images      :as im]
-            [image-lib.keywords    :as kw]
             [image-lib.search      :as is]
             [image-lib.helper      :as ih]
-            [image-lib.file-helper :as if]
             [image-lib.projects    :as ip]
             [image-lib.preferences :as pr]
             [monger
@@ -40,13 +38,7 @@
 (expect "clojure-test"
         (ih/version-name "/tmp/clojure-test.jpg"))
 (expect "/2015/02/09-Project"
-        (ih/project-name "/2015/02/09-Project/DIW_123.jpg"))
-(expect true
-        (if/file-exists? "/tmp/clojure-test.txt"))
-(expect true
-        (if/related-file-exists? "/tmp/clojure-test.png"))
-(expect true
-        (if/loosely-related-file-exists? "/tmp/clojure-test_version_1.png"))
+  (ih/project-name "/2015/02/09-Project/DIW_123.jpg"))
 (expect 3 (count (ip/all-projects db "images")))
 (expect (ih/best [{:_id 1 :Rating "2.0"}
                   {:_id 2 :Rating "3.0"}])

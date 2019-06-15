@@ -1,4 +1,4 @@
-(ns image-lib.file-helper
+(ns image-lib.file
   (:require [image-lib.helper :refer [version-name image-paths]]))
 
 (defn file-exists?
