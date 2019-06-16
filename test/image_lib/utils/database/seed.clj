@@ -21,28 +21,28 @@
 
   ([db]
    (println "Seeding images")
-   (mc/insert-batch db "images" [{:_id "1"
+   (mc/insert-batch db "images" [{:_id "19830115-Test-ProjectDIW_001"
                                   :Year "1983"
                                   :Month "01"
                                   :Project "15-Test-Project"
                                   :Version "DIW_001"
-                                  :Keywords ["Kathryn"]
+                                  :Keywords ["Kathryn" "color"]
                                   :Rating "4.0"}
-                                 {:_id "2"
+                                 {:_id "19811018-Test-ProjectDIW_002"
                                   :Year "1981"
                                   :Month "10"
                                   :Project "18-Test-Project"
                                   :Version "DIW_002"
-                                  :Keywords ["Rachael"]
+                                  :Keywords ["Rachael" "colour"]
                                   :Rating "5.0"}
-                                 {:_id "3"
+                                 {:_id "19581012-Test-ProjectDIW_001"
                                   :Year "1958"
                                   :Month "10"
                                   :Project "12-Test-Project"
                                   :Version "DIW_001"
-                                  :Keywords ["Iain"]
+                                  :Keywords ["Iain" "I'm a missing keyword"]
                                   :rating "3.0"}
-                                 {:_id "4"
+                                 {:_id "19581012-Test-ProjectDIW_002"
                                   :Year "1958"
                                   :Month "10"
                                   :Project "12-Test-Project"
@@ -63,4 +63,7 @@
                                    {:_id "Iain" :sub []}
                                    {:_id "Rachael" :sub []}
                                    {:_id "me" :sub ["Iain"]}
-                                   {:_id "Root" :sub ["people"]}])))
+                                   {:_id "Root" :sub ["people"]}
+                                   {:_id "colour" :sub []}
+                                   {:_id "color" :sub []}
+                                   {:_id "I'm an orphaned keyword" :sub []}])))

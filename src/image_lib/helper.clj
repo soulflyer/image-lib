@@ -70,7 +70,7 @@
   (str (:Year image-map) "/"
     (:Month image-map) "/"
     (:Project image-map) "/"
-    ;;TODO this reall`y shouldn't be adding .jpg here
+    ;;TODO this really shouldn't be adding .jpg here
     (:Version image-map) ".jpg"))
 
 
