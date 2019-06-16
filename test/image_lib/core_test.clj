@@ -1,15 +1,15 @@
 (ns image-lib.core-test
-  (:require [image-lib.core        :as ic]
-            [image-lib.helper      :as ih]
-            [monger [core :as mg]]
-            ;; TODO Need to switch to clojure-test expectations but that means using deftest first
-            ;;[expectations.clojure.test :refer :all]
-            [expectations :refer :all]            ))
+  (:require [clojure.test :refer :all]
+            [expectations.clojure.test :refer :all]
+            [image-lib.core :as sut]
+            [image-lib.helper :as helper]
+            [image-lib.utils.database :as database]
+            [image-lib.utils.fixtures :as fixtures]
+            [monger.core :as mg]))
 
-;; (use-fixtures :once ??)
+(use-fixtures :once fixtures/database fixtures/seed-images fixtures/seed-keywords)
 
-(def db (mg/get-db (mg/connect) "test"))
-
-
-(expect (ih/image-path (ic/best-image db "images" "Iain"))
-  "1958/10/12-Test-Project/DIW_002.jpg")
+(deftest best-image
+  []
+  (expect (helper/image-path (sut/best-image (database/connection) database/images "Iain"))
+    "1958/10/12-Test-Project/DIW_002.jpg"))
