@@ -27,11 +27,13 @@
     (< 0 (count (filter #(re-find (re-pattern %) vname) (map version-name files))))))
 
 (defn missing-files
-  "Searches the directory given by root-path and returns a list of any images not found there but present in the image db. find-function is a function that when given a file path returns true or false. Try image-lib.core/file-exists? "
-  [db image-collection root-path find-function]
+  "Searches the directory given by root-path and returns a list of any images
+  not found there but present in the image db. find-function is a function that
+  when given a file path returns true or false. Try image-lib.core/file-exists? "
+  [image-paths root-path find-function]
   (remove
     (fn [im] (find-function (str root-path "/" im)))
-    (image-paths db image-collection)))
+    image-paths))
 
 (defn write
   "Append the collection 'things' to file 'file-name' one per line"
