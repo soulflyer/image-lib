@@ -215,8 +215,12 @@ GUI app for browsing photos and editing their metadata.
 
 0.2.2-SNAPSHOT Breaking changes. Namespace split into smaller pieces.
 
+0.2.5
+
+0.2.6 Fixed missing-files
+
 ## License
 
-Copyright Iain Wood © 2015-2017
+Copyright Iain Wood © 2015-2023
 
 Distributed under the Eclipse Public License version 1.0 
