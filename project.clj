@@ -7,6 +7,6 @@
                  [org.clojure/clojure "1.10.1"]]
   :profiles {:dev {:dependencies [[expectations/clojure-test "1.1.1"]]
                    :plugins [[autodoc/lein-autodoc "1.1.1"]
-                             [lein-codox "0.10.7"]]
+                             [lein-codox "0.10.8"]]
                    :codox {:output-path  "docs/new"
                            :themes [:default :imagelib]}}})
